@@ -123,7 +123,7 @@ caugi <- S7::new_class(
       S7::class_any,
       getter = function(self) self@`.state`$edges,
       setter = function(self, value) {
-        stop("`edges` properrt is read-only via @ <-. ",
+        stop("`edges` property is read-only via @ <-. ",
           "Use `add_edges()` or `remove_edges()` instead. ",
           "Advanced users can modify `cg@.state$edges` directly ",
           "but this is not recommended.",

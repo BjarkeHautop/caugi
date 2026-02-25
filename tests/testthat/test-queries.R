@@ -979,3 +979,77 @@ test_that("anteriors returns list for multiple nodes", {
   expect_null(result$A)
   expect_equal(sort(result$D), c("A", "B", "C"))
 })
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ────────────────────────────── Closed graph definition tests ─────────────────
+# ──────────────────────────────────────────────────────────────────────────────
+
+test_that("ancestors, anteriors, descendants errors on not boolean open argument", {
+  cg <- caugi(
+    A %-->% B %---% C,
+    B %-->% D,
+    class = "PDAG"
+  )
+
+  expect_error(
+    ancestors(cg, "A", open = "hi"),
+    "`open` must be a single TRUE or FALSE."
+  )
+  expect_error(
+    anteriors(cg, "A", open = "hi"),
+    "`open` must be a single TRUE or FALSE."
+  )
+  expect_error(
+    descendants(cg, "A", open = "hi"),
+    "`open` must be a single TRUE or FALSE."
+  )
+})
+
+test_that("ancestors, anteriors, descendants handles closed graph definition", {
+  cg <- caugi(
+    A %-->% B %---% C,
+    B %-->% D,
+    class = "PDAG"
+  )
+
+  expect_equal(ancestors(cg, "A", open = FALSE), "A")
+  expect_equal(ancestors(cg, "B", open = FALSE), c("B", "A"))
+
+  expect_equal(anteriors(cg, "A", open = FALSE), "A")
+  expect_equal(
+    anteriors(cg, "C", open = FALSE),
+    c("C", "A", "B")
+  )
+
+  expect_equal(
+    descendants(cg, "A", open = FALSE),
+    c("A", "B", "D")
+  )
+  expect_equal(descendants(cg, "B", open = FALSE), c("B", "D"))
+})
+
+test_that("Setting graph definition via caugi_options works", {
+  caugi_options(graph_definition = "closed")
+  cg <- caugi(
+    A %-->% B %---% C,
+    B %-->% D,
+    class = "PDAG"
+  )
+
+  expect_equal(ancestors(cg, "A"), "A")
+  expect_equal(ancestors(cg, "B"), c("B", "A"))
+
+  expect_equal(anteriors(cg, "A"), "A")
+  expect_equal(anteriors(cg, "C"), c("C", "A", "B"))
+
+  expect_equal(descendants(cg, "A"), c("A", "B", "D"))
+  expect_equal(descendants(cg, "B"), c("B", "D"))
+
+  # Can still override with explicit argument
+  expect_equal(ancestors(cg, "A", open = TRUE), NULL)
+  expect_equal(anteriors(cg, "A", open = TRUE), NULL)
+  expect_equal(descendants(cg, "A", open = TRUE), c("B", "D"))
+
+  # Reset to defaults
+  caugi_options(caugi_default_options())
+})

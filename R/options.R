@@ -21,6 +21,7 @@
 #' caugi_options(caugi_default_options())
 caugi_default_options <- function() {
   list(
+    graph_definition = "open",
     plot = list(
       spacing = grid::unit(1, "lines"),
       node_style = list(
@@ -66,7 +67,13 @@ caugi_default_options <- function() {
 #'   the requested options.
 #'
 #' @details
-#' Currently supported options are nested under the `plot` key:
+#' The `graph_definition` option controls how graph queries interpret
+#' reachability relations. It must be either `"open"` (default) or `"closed"`.
+#' When `"open"` is used, queries such as `ancestors()`, `descendants()`, and
+#' `anteriors()` exclude the queried node itself. When `"closed"` is used, the
+#' queried node is included in the results.
+#'
+#' The plot options are nested under the `plot` key:
 #'
 #' - `spacing`: A [grid::unit()] controlling space between composed plots
 #'   (default: `grid::unit(1, "lines")`)
@@ -95,6 +102,9 @@ caugi_default_options <- function() {
 #' @examples
 #' # Query all options
 #' caugi_options()
+#'
+#' # Set graph definition to "closed"
+#' caugi_options(graph_definition = "closed")
 #'
 #' # Query specific option
 #' caugi_options("plot")

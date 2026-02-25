@@ -21,7 +21,7 @@
 #' caugi_options(caugi_default_options())
 caugi_default_options <- function() {
   list(
-    graph_definition = "open",
+    use_open_graph_definition = TRUE,
     plot = list(
       spacing = grid::unit(1, "lines"),
       node_style = list(
@@ -67,11 +67,13 @@ caugi_default_options <- function() {
 #'   the requested options.
 #'
 #' @details
-#' The `graph_definition` option controls how graph queries interpret
-#' reachability relations. It must be either `"open"` (default) or `"closed"`.
-#' When `"open"` is used, queries such as `ancestors()`, `descendants()`, and
-#' `anteriors()` exclude the queried node itself. When `"closed"` is used, the
-#' queried node is included in the results.
+#' The `use_open_graph_definition` option (`TRUE`/`FALSE`, default `TRUE`)
+#' controls how graph queries interpret reachability relations.
+#' When `TRUE` (open definition), queries such as `ancestors()`,
+#' `descendants()`, `posteriors()`,and `anteriors()`
+#' exclude the queried node itself.
+#' When `FALSE` (closed definition), the queried node is included in the
+#' results.
 #'
 #' The plot options are nested under the `plot` key:
 #'
@@ -103,8 +105,8 @@ caugi_default_options <- function() {
 #' # Query all options
 #' caugi_options()
 #'
-#' # Set graph definition to "closed"
-#' caugi_options(graph_definition = "closed")
+#' # Use closed graph definition
+#' caugi_options(use_open_graph_definition = FALSE)
 #'
 #' # Query specific option
 #' caugi_options("plot")
@@ -150,5 +152,8 @@ caugi_options <- function(...) {
   names(out) <- nm
 
   .caugi_env$options <- utils::modifyList(old, new)
+  .caugi_env$open_graph_def <- isTRUE(
+    .caugi_env$options$use_open_graph_definition
+  )
   invisible(out)
 }

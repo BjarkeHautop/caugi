@@ -1028,8 +1028,8 @@ test_that("ancestors, anteriors, descendants handles closed graph definition", {
   expect_equal(descendants(cg, "B", open = FALSE), c("B", "D"))
 })
 
-test_that("Setting graph definition via caugi_options works", {
-  caugi_options(graph_definition = "closed")
+test_that("Setting use_open_graph_definition via caugi_options works", {
+  caugi_options(use_open_graph_definition = FALSE)
   cg <- caugi(
     A %-->% B %---% C,
     B %-->% D,
@@ -1052,4 +1052,64 @@ test_that("Setting graph definition via caugi_options works", {
 
   # Reset to defaults
   caugi_options(caugi_default_options())
+})
+
+# ──────────────────────────────────────────────────────────────────────────────
+# ──────────────────── open_graph_def fast-access env var ──────────────────────
+# ──────────────────────────────────────────────────────────────────────────────
+
+test_that("open_graph_def is TRUE by default", {
+  expect_true(.caugi_env$open_graph_def)
+})
+
+test_that("open_graph_def syncs to FALSE when use_open_graph_definition is set FALSE", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  caugi_options(use_open_graph_definition = FALSE)
+  expect_false(.caugi_env$open_graph_def)
+})
+
+test_that("open_graph_def syncs back to TRUE when use_open_graph_definition is set TRUE", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  caugi_options(use_open_graph_definition = FALSE)
+  caugi_options(use_open_graph_definition = TRUE)
+  expect_true(.caugi_env$open_graph_def)
+})
+
+test_that("open_graph_def is restored to TRUE by caugi_default_options()", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  caugi_options(use_open_graph_definition = FALSE)
+  expect_false(.caugi_env$open_graph_def)
+
+  caugi_options(caugi_default_options())
+  expect_true(.caugi_env$open_graph_def)
+})
+
+test_that("open_graph_def is unaffected by unrelated option updates", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  caugi_options(plot = list(spacing = grid::unit(2, "lines")))
+  expect_true(.caugi_env$open_graph_def)
+})
+
+test_that("missing(open) uses global option; explicit open overrides it", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  cg <- caugi(A %-->% B %-->% C, class = "DAG")
+
+  # With default option (open = TRUE): node excluded
+  expect_equal(ancestors(cg, "B"), "A")
+
+  # Switch global option to closed; missing open now means closed
+  caugi_options(use_open_graph_definition = FALSE)
+  expect_equal(ancestors(cg, "B"), c("B", "A"))
+
+  # Explicit open = TRUE overrides the closed global option
+  expect_equal(ancestors(cg, "B", open = TRUE), "A")
+
+  # Explicit open = FALSE overrides the open global option after reset
+  caugi_options(use_open_graph_definition = TRUE)
+  expect_equal(ancestors(cg, "B", open = FALSE), c("B", "A"))
 })

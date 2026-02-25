@@ -20,11 +20,13 @@ Configure global defaults for caugi, including plot composition spacing and
 default visual styles for nodes, edges, labels, and titles.
 }
 \details{
-The \code{graph_definition} option controls how graph queries interpret
-reachability relations. It must be either \code{"open"} (default) or \code{"closed"}.
-When \code{"open"} is used, queries such as \code{ancestors()}, \code{descendants()}, and
-\code{anteriors()} exclude the queried node itself. When \code{"closed"} is used, the
-queried node is included in the results.
+The \code{use_open_graph_definition} option (\code{TRUE}/\code{FALSE}, default \code{TRUE})
+controls how graph queries interpret reachability relations.
+When \code{TRUE} (open definition), queries such as \code{ancestors()},
+\code{descendants()}, \code{posteriors()},and \code{anteriors()}
+exclude the queried node itself.
+When \code{FALSE} (closed definition), the queried node is included in the
+results.
 
 The plot options are nested under the \code{plot} key:
 \itemize{
@@ -58,8 +60,8 @@ overridden by arguments to \code{\link[=plot]{plot()}}.
 # Query all options
 caugi_options()
 
-# Set graph definition to "closed"
-caugi_options(graph_definition = "closed")
+# Use closed graph definition
+caugi_options(use_open_graph_definition = FALSE)
 
 # Query specific option
 caugi_options("plot")

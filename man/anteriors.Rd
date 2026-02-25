@@ -4,7 +4,7 @@
 \alias{anteriors}
 \title{Get anteriors of nodes in a \code{caugi}}
 \usage{
-anteriors(cg, nodes = NULL, index = NULL, open = NULL)
+anteriors(cg, nodes = NULL, index = NULL, open = TRUE)
 }
 \arguments{
 \item{cg}{A \code{caugi} object.}
@@ -15,8 +15,8 @@ node names, or an expression combining these with \code{+} and \code{c()}.}
 \item{index}{A vector of node indexes.}
 
 \item{open}{Boolean. Determines how the graph is interpreted when retrieving anteriors.
-If \code{NULL} (default) the value is taken from \code{caugi_options("graph_definition")}, which by default is
-open.}
+If not supplied, the value is taken from
+\code{caugi_options("use_open_graph_definition")}, which by default is \code{TRUE}.}
 }
 \value{
 Either a character vector of node names (if a single node is

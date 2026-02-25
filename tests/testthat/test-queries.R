@@ -1093,3 +1093,23 @@ test_that("open_graph_def is unaffected by unrelated option updates", {
   caugi_options(plot = list(spacing = grid::unit(2, "lines")))
   expect_true(.caugi_env$open_graph_def)
 })
+
+test_that("missing(open) uses global option; explicit open overrides it", {
+  on.exit(caugi_options(caugi_default_options()), add = TRUE)
+
+  cg <- caugi(A %-->% B %-->% C, class = "DAG")
+
+  # With default option (open = TRUE): node excluded
+  expect_equal(ancestors(cg, "B"), "A")
+
+  # Switch global option to closed; missing open now means closed
+  caugi_options(use_open_graph_definition = FALSE)
+  expect_equal(ancestors(cg, "B"), c("B", "A"))
+
+  # Explicit open = TRUE overrides the closed global option
+  expect_equal(ancestors(cg, "B", open = TRUE), "A")
+
+  # Explicit open = FALSE overrides the open global option after reset
+  caugi_options(use_open_graph_definition = TRUE)
+  expect_equal(ancestors(cg, "B", open = FALSE), c("B", "A"))
+})

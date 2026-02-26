@@ -4,6 +4,11 @@
 
 - Add `minimal_d_separator()`, which computes a minimal d-separator between
   sets of nodes in a DAG, with support for mandatory inclusions and restrictions.
+  
+-You can now specify whether to use an open or closed graph definition for the queries
+  `ancestors()`, `anteriors()`, and `descendants()` (TODO: also for `posteriors()`). Can be set
+  globally with `caugi_options()` or locally with `open = TRUE/FALSE` argument. Default is `open = TRUE`, like
+  it was before implicitly.
 
 ## Improvements
 

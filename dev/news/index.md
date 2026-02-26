@@ -8,6 +8,15 @@
   [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_d_separator.md),
   which computes a minimal d-separator between sets of nodes in a DAG,
   with support for mandatory inclusions and restrictions.
+- Add [`posteriors()`](https://caugi.org/dev/reference/posteriors.md)
+  query function, which is the dual of
+  [`anteriors()`](https://caugi.org/dev/reference/anteriors.md). It
+  returns all nodes reachable by following paths where every edge is
+  either undirected or directed away from the source node. For DAGs,
+  [`posteriors()`](https://caugi.org/dev/reference/posteriors.md) equals
+  [`descendants()`](https://caugi.org/dev/reference/descendants.md). For
+  PDAGs and AGs, it includes both descendants and nodes reachable via
+  undirected edges.
 
 ### Improvements
 
@@ -39,6 +48,14 @@
   [`plot()`](https://caugi.org/dev/reference/plot.md) to use incorrect
   layout if node names were not in the same order as in the graph object
   ([\#198](https://github.com/frederikfabriciusbjerre/caugi/issues/198)).
+
+### Deprecations
+
+- The parameter `all` in
+  [`districts()`](https://caugi.org/dev/reference/districts.md) has been
+  deprecated. Just use
+  [`districts()`](https://caugi.org/dev/reference/districts.md) without
+  arguments to get all districts.
 
 ## caugi 1.0.0
 

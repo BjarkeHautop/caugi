@@ -2,7 +2,7 @@
 <url><loc>https://caugi.org/dev/CONTRIBUTING.html</loc></url>
 <url><loc>https://caugi.org/dev/LICENSE-text.html</loc></url>
 <url><loc>https://caugi.org/dev/LICENSE.html</loc></url>
-<url><loc>https://caugi.org/dev/articles/get_started.html</loc></url>
+<url><loc>https://caugi.org/dev/articles/caugi.html</loc></url>
 <url><loc>https://caugi.org/dev/articles/index.html</loc></url>
 <url><loc>https://caugi.org/dev/articles/motivation.html</loc></url>
 <url><loc>https://caugi.org/dev/articles/package_use.html</loc></url>
@@ -127,6 +127,7 @@
 <url><loc>https://caugi.org/dev/reference/nodes.html</loc></url>
 <url><loc>https://caugi.org/dev/reference/parents.html</loc></url>
 <url><loc>https://caugi.org/dev/reference/plot.html</loc></url>
+<url><loc>https://caugi.org/dev/reference/posteriors.html</loc></url>
 <url><loc>https://caugi.org/dev/reference/print.html</loc></url>
 <url><loc>https://caugi.org/dev/reference/read_caugi.html</loc></url>
 <url><loc>https://caugi.org/dev/reference/read_graphml.html</loc></url>

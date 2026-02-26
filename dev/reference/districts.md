@@ -2,12 +2,13 @@
 
 Get districts (c-components) for all nodes, or for selected nodes in an
 ADMG/AG. A district is a maximal set of nodes connected via bidirected
-edges.
+edges. If both `nodes` and `index` are `NULL`, returns all districts in
+the graph.
 
 ## Usage
 
 ``` r
-districts(cg, nodes = NULL, index = NULL, all = NULL)
+districts(cg, nodes = NULL, index = NULL, all)
 ```
 
 ## Arguments
@@ -28,8 +29,8 @@ districts(cg, nodes = NULL, index = NULL, all = NULL)
 
 - all:
 
-  Optional logical. If `TRUE`, return all districts explicitly. Cannot
-  be combined with `nodes` or `index`.
+  DEPRECATED (If `TRUE`, return all districts explicitly. Cannot be
+  combined with `nodes` or `index`.)
 
 ## Value
 
@@ -63,6 +64,7 @@ Other queries:
 [`neighbors()`](https://caugi.org/dev/reference/neighbors.md),
 [`nodes()`](https://caugi.org/dev/reference/nodes.md),
 [`parents()`](https://caugi.org/dev/reference/parents.md),
+[`posteriors()`](https://caugi.org/dev/reference/posteriors.md),
 [`same_nodes()`](https://caugi.org/dev/reference/same_nodes.md),
 [`spouses()`](https://caugi.org/dev/reference/spouses.md),
 [`subgraph()`](https://caugi.org/dev/reference/subgraph.md),

@@ -1179,7 +1179,7 @@ anteriors <- function(
 #' @param cg A `caugi` object of class DAG, PDAG, or AG.
 #' @param nodes A vector of node names.
 #' @param index A vector of node indexes.
-#' @param open Boolean. Determines how the graph is interpreted when retrieving anteriors.
+#' @param open Boolean. Determines how the graph is interpreted when retrieving posteriors.
 #'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
 #'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
 #'

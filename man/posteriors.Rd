@@ -18,7 +18,7 @@ posteriors(
 
 \item{index}{A vector of node indexes.}
 
-\item{open}{Boolean. Determines how the graph is interpreted when retrieving anteriors.
+\item{open}{Boolean. Determines how the graph is interpreted when retrieving posteriors.
 Default is taken from \code{caugi_options("use_open_graph_definition")$use_open_graph_definition},
 which by default is TRUE.}
 }

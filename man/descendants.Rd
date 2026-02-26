@@ -4,7 +4,12 @@
 \alias{descendants}
 \title{Get descendants of nodes in a \code{caugi}}
 \usage{
-descendants(cg, nodes = NULL, index = NULL, open = TRUE)
+descendants(
+  cg,
+  nodes = NULL,
+  index = NULL,
+  open = caugi::caugi_options("use_open_graph_definition")$use_open_graph_definition
+)
 }
 \arguments{
 \item{cg}{A \code{caugi} object.}
@@ -15,8 +20,8 @@ node names, or an expression combining these with \code{+} and \code{c()}.}
 \item{index}{A vector of node indexes.}
 
 \item{open}{Boolean. Determines how the graph is interpreted when retrieving descendants.
-If not supplied, the value is taken from
-\code{caugi_options("use_open_graph_definition")}, which by default is \code{TRUE}.}
+Default is taken from \code{caugi_options("use_open_graph_definition")$use_open_graph_definition},
+which by default is TRUE.}
 }
 \value{
 Either a character vector of node names (if a single node is

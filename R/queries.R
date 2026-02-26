@@ -889,8 +889,8 @@ neighbours <- neighbors
 #' node names, or an expression combining these with `+` and `c()`.
 #' @param index A vector of node indexes.
 #' @param open Boolean. Determines how the graph is interpreted when retrieving ancestors.
-#'   If not supplied, the value is taken from
-#'   `caugi_options("use_open_graph_definition")`, which by default is `TRUE`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
+#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -916,10 +916,14 @@ neighbours <- neighbors
 #' @concept queries
 #'
 #' @export
-ancestors <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
-  if (missing(open)) {
-    open <- .caugi_env$open_graph_def
-  }
+ancestors <- function(
+  cg,
+  nodes = NULL,
+  index = NULL,
+  open = caugi::caugi_options(
+    "use_open_graph_definition"
+  )$use_open_graph_definition
+) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
   }
@@ -973,8 +977,8 @@ ancestors <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
 #'
 #' @inheritParams ancestors
 #' @param open Boolean. Determines how the graph is interpreted when retrieving descendants.
-#'   If not supplied, the value is taken from
-#'   `caugi_options("use_open_graph_definition")`, which by default is `TRUE`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
+#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -1000,10 +1004,14 @@ ancestors <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
 #' @concept queries
 #'
 #' @export
-descendants <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
-  if (missing(open)) {
-    open <- .caugi_env$open_graph_def
-  }
+descendants <- function(
+  cg,
+  nodes = NULL,
+  index = NULL,
+  open = caugi::caugi_options(
+    "use_open_graph_definition"
+  )$use_open_graph_definition
+) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
   }
@@ -1066,8 +1074,8 @@ descendants <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
 #'
 #' @inheritParams ancestors
 #' @param open Boolean. Determines how the graph is interpreted when retrieving anteriors.
-#'   If not supplied, the value is taken from
-#'   `caugi_options("use_open_graph_definition")`, which by default is `TRUE`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
+#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -1099,10 +1107,14 @@ descendants <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
 #' @concept queries
 #'
 #' @export
-anteriors <- function(cg, nodes = NULL, index = NULL, open = TRUE) {
-  if (missing(open)) {
-    open <- .caugi_env$open_graph_def
-  }
+anteriors <- function(
+  cg,
+  nodes = NULL,
+  index = NULL,
+  open = caugi::caugi_options(
+    "use_open_graph_definition"
+  )$use_open_graph_definition
+) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
   }

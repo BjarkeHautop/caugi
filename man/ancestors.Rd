@@ -8,7 +8,7 @@ ancestors(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi::caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 }
 \arguments{
@@ -19,7 +19,7 @@ ancestors(
 \item{index}{A vector of node indexes.}
 
 \item{open}{Boolean. Determines how the graph is interpreted when retrieving ancestors.
-Default is taken from \code{caugi_options("use_open_graph_definition")$use_open_graph_definition},
+Default is taken from \code{caugi_options("use_open_graph_definition")},
 which by default is TRUE.}
 }
 \value{

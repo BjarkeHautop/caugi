@@ -8,7 +8,7 @@ descendants(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 }
 \arguments{
@@ -19,7 +19,7 @@ descendants(
 \item{index}{A vector of node indexes.}
 
 \item{open}{Boolean. Determines how the graph is interpreted when retrieving descendants.
-Default is taken from \code{caugi_options("use_open_graph_definition")$use_open_graph_definition},
+Default is taken from \code{caugi_options("use_open_graph_definition")},
 which by default is TRUE.}
 }
 \value{

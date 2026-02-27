@@ -879,8 +879,8 @@ neighbours <- neighbors
 #'
 #' @inheritParams parents
 #' @param open Boolean. Determines how the graph is interpreted when retrieving ancestors.
-#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")`,
+#'   which by default is `r caugi_options("use_open_graph_definition")`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -910,9 +910,7 @@ ancestors <- function(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi::caugi_options(
-    "use_open_graph_definition"
-  )$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 ) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
@@ -967,8 +965,8 @@ ancestors <- function(
 #'
 #' @inheritParams parents
 #' @param open Boolean. Determines how the graph is interpreted when retrieving descendants.
-#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")`,
+#'   which by default is `r caugi_options("use_open_graph_definition")`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -998,9 +996,7 @@ descendants <- function(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options(
-    "use_open_graph_definition"
-  )$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 ) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
@@ -1065,8 +1061,8 @@ descendants <- function(
 #' @inheritParams parents
 #' @param cg A `caugi` object of class DAG or PDAG.
 #' @param open Boolean. Determines how the graph is interpreted when retrieving anteriors.
-#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")`,
+#'   which by default is `r caugi_options("use_open_graph_definition")`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -1102,9 +1098,7 @@ anteriors <- function(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options(
-    "use_open_graph_definition"
-  )$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 ) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)
@@ -1170,8 +1164,8 @@ anteriors <- function(
 #' @inheritParams parents
 #' @param cg A `caugi` object of class DAG, PDAG, or AG.
 #' @param open Boolean. Determines how the graph is interpreted when retrieving posteriors.
-#'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-#'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
+#'   Default is taken from `caugi_options("use_open_graph_definition")`,
+#'   which by default is `r caugi_options("use_open_graph_definition")`.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #'   requested) or a list of character vectors (if multiple nodes are requested).
@@ -1204,9 +1198,7 @@ posteriors <- function(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options(
-    "use_open_graph_definition"
-  )$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 ) {
   if (!is.logical(open) || length(open) != 1L) {
     stop("`open` must be a single TRUE or FALSE.", call. = FALSE)

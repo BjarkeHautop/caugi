@@ -8,18 +8,18 @@ anteriors(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 }
 \arguments{
-\item{cg}{A \code{caugi} object.}
+\item{cg}{A \code{caugi} object of class DAG or PDAG.}
 
 \item{nodes}{A character vector of node names.}
 
 \item{index}{A vector of node indexes.}
 
 \item{open}{Boolean. Determines how the graph is interpreted when retrieving anteriors.
-Default is taken from \code{caugi_options("use_open_graph_definition")$use_open_graph_definition},
+Default is taken from \code{caugi_options("use_open_graph_definition")},
 which by default is TRUE.}
 }
 \value{

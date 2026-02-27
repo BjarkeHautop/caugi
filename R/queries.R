@@ -650,8 +650,7 @@ edge_types <- function(cg) {
 #' Note that not both nodes and index can be given.
 #'
 #' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
+#' @param nodes A character vector of node names.
 #' @param index A vector of node indexes.
 #'
 #' @returns Either a character vector of node names (if a single node is
@@ -709,10 +708,7 @@ parents <- function(cg, nodes = NULL, index = NULL) {
 #' from the target nodes).
 #' This is equivalent to `neighbors(cg, nodes, mode = "out")`.
 #'
-#' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
-#' @param index A vector of node indexes.
+#' @inheritParams parents
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -768,10 +764,7 @@ children <- function(cg, nodes = NULL, index = NULL) {
 #' Get neighbors of a node in the graph, optionally filtered by edge direction
 #' or type. This function works for all graph classes including `UNKNOWN`.
 #'
-#' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
-#' @param index A vector of node indexes.
+#' @inheritParams parents
 #' @param mode Character; specifies which types of neighbors to return:
 #' \describe{
 #'   \item{`"all"`}{All neighbors (default)}
@@ -884,10 +877,7 @@ neighbours <- neighbors
 
 #' @title Get ancestors of nodes in a `caugi`
 #'
-#' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
-#' @param index A vector of node indexes.
+#' @inheritParams parents
 #' @param open Boolean. Determines how the graph is interpreted when retrieving ancestors.
 #'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
 #'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
@@ -975,7 +965,7 @@ ancestors <- function(
 
 #' @title Get descendants of nodes in a `caugi`
 #'
-#' @inheritParams ancestors
+#' @inheritParams parents
 #' @param open Boolean. Determines how the graph is interpreted when retrieving descendants.
 #'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
 #'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
@@ -1072,7 +1062,8 @@ descendants <- function(
 #' undirected edges). For PDAGs, it includes both ancestors and nodes reachable
 #' via undirected edges.
 #'
-#' @inheritParams ancestors
+#' @inheritParams parents
+#' @param cg A `caugi` object of class DAG or PDAG.
 #' @param open Boolean. Determines how the graph is interpreted when retrieving anteriors.
 #'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
 #'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
@@ -1176,9 +1167,8 @@ anteriors <- function(
 #' undirected edges). For PDAGs, it includes both descendants and nodes reachable
 #' via undirected edges.
 #'
+#' @inheritParams parents
 #' @param cg A `caugi` object of class DAG, PDAG, or AG.
-#' @param nodes A vector of node names.
-#' @param index A vector of node indexes.
 #' @param open Boolean. Determines how the graph is interpreted when retrieving posteriors.
 #'   Default is taken from `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
 #'   which by default is `r caugi_options("use_open_graph_definition")$use_open_graph_definition`.
@@ -1272,10 +1262,7 @@ posteriors <- function(
 
 #' @title Get Markov blanket of nodes in a `caugi`
 #'
-#' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
-#' @param index A vector of node indexes.
+#' @inheritParams parents
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -1412,9 +1399,8 @@ topological_sort <- function(cg) {
 #'
 #' @description Get nodes connected via bidirected edges in an ADMG.
 #'
+#' @inheritParams parents
 #' @param cg A `caugi` object of class ADMG.
-#' @param nodes A vector of node names.
-#' @param index A vector of node indexes.
 #'
 #' @returns Either a character vector of node names (if a single node is
 #' requested) or a list of character vectors (if multiple nodes are requested).
@@ -1592,9 +1578,9 @@ districts <- function(cg, nodes = NULL, index = NULL, all) {
 #' M-separation generalizes d-separation to AGs/ADMGs and applies to DAGs.
 #'
 #' @param cg A `caugi` object of class AG, ADMG, or DAG.
-#' @param X,Y,Z Node selectors: character vector of names, unquoted expression
-#'   (supports `+` and `c()`), or `NULL`. Use `*_index` to pass 1-based indices.
-#'   If `Z` is `NULL` or missing, no nodes are conditioned on.
+#' @param X,Y,Z Character vectors of node names, or `NULL`. Use `*_index` to
+#'   pass 1-based indices. If `Z` is `NULL` or missing, no nodes are conditioned
+#'   on.
 #' @param X_index,Y_index,Z_index Optional numeric 1-based indices (exclusive
 #'   with `X`,`Y`,`Z` respectively).
 #'
@@ -1639,10 +1625,7 @@ m_separated <- function(
 
 #' @title Get the induced subgraph
 #'
-#' @param cg A `caugi` object.
-#' @param nodes A vector of node names, a vector of unquoted
-#' node names, or an expression combining these with `+` and `c()`.
-#' @param index A vector of node indexes.
+#' @inheritParams parents
 #'
 #' @returns A new `caugi` that is a subgraph of the selected nodes.
 #'

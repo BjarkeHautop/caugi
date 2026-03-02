@@ -32,14 +32,15 @@ Other operations:
 [`exogenize()`](https://caugi.org/dev/reference/exogenize.md),
 [`latent_project()`](https://caugi.org/dev/reference/latent_project.md),
 [`moralize()`](https://caugi.org/dev/reference/moralize.md),
-[`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md)
+[`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
+[`normalize_latent_structure()`](https://caugi.org/dev/reference/normalize_latent_structure.md)
 
 ## Examples
 
 ``` r
 cg <- caugi(A %-->% B, class = "DAG")
 skeleton(cg) # A --- B
-#> <caugi object; 2 nodes, 1 edges; simple: TRUE; session=0x55d58839fcd0>
+#> <caugi object; 2 nodes, 1 edges; simple: TRUE; session=0x55f5a511e600>
 #>   graph_class: UG
 #>   nodes: A, B
 #>   edges: A---B

@@ -9,7 +9,7 @@ descendants(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 ```
 
@@ -21,9 +21,7 @@ descendants(
 
 - nodes:
 
-  A vector of node names, a vector of unquoted node names, or an
-  expression combining these with `+` and
-  [`c()`](https://rdrr.io/r/base/c.html).
+  A character vector of node names.
 
 - index:
 
@@ -33,8 +31,8 @@ descendants(
 
   Boolean. Determines how the graph is interpreted when retrieving
   descendants. Default is taken from
-  `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-  which by default is TRUE.
+  `caugi_options("use_open_graph_definition")`, which by default is
+  TRUE.
 
 ## Value
 

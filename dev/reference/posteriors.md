@@ -16,7 +16,7 @@ posteriors(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 ```
 
@@ -28,7 +28,7 @@ posteriors(
 
 - nodes:
 
-  A vector of node names.
+  A character vector of node names.
 
 - index:
 
@@ -38,8 +38,8 @@ posteriors(
 
   Boolean. Determines how the graph is interpreted when retrieving
   posteriors. Default is taken from
-  `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-  which by default is TRUE.
+  `caugi_options("use_open_graph_definition")`, which by default is
+  TRUE.
 
 ## Value
 

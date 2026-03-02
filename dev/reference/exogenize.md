@@ -33,6 +33,7 @@ Other operations:
 [`latent_project()`](https://caugi.org/dev/reference/latent_project.md),
 [`moralize()`](https://caugi.org/dev/reference/moralize.md),
 [`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
+[`normalize_latent_structure()`](https://caugi.org/dev/reference/normalize_latent_structure.md),
 [`skeleton()`](https://caugi.org/dev/reference/skeleton.md)
 
 ## Examples
@@ -40,7 +41,7 @@ Other operations:
 ``` r
 cg <- caugi(A %-->% B, class = "DAG")
 exogenize(cg, nodes = "B") # A, B
-#> <caugi object; 2 nodes, 0 edges; simple: TRUE; session=0x55d586f24a40>
+#> <caugi object; 2 nodes, 0 edges; simple: TRUE; session=0x55f5a13911d0>
 #>   graph_class: DAG
 #>   nodes: A, B
 #>   edges: (none)

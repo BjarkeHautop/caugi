@@ -15,7 +15,7 @@ anteriors(
   cg,
   nodes = NULL,
   index = NULL,
-  open = caugi_options("use_open_graph_definition")$use_open_graph_definition
+  open = caugi_options("use_open_graph_definition")
 )
 ```
 
@@ -23,13 +23,11 @@ anteriors(
 
 - cg:
 
-  A `caugi` object.
+  A `caugi` object of class DAG or PDAG.
 
 - nodes:
 
-  A vector of node names, a vector of unquoted node names, or an
-  expression combining these with `+` and
-  [`c()`](https://rdrr.io/r/base/c.html).
+  A character vector of node names.
 
 - index:
 
@@ -39,8 +37,8 @@ anteriors(
 
   Boolean. Determines how the graph is interpreted when retrieving
   anteriors. Default is taken from
-  `caugi_options("use_open_graph_definition")$use_open_graph_definition`,
-  which by default is TRUE.
+  `caugi_options("use_open_graph_definition")`, which by default is
+  TRUE.
 
 ## Value
 

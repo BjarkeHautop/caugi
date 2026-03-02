@@ -5,6 +5,10 @@
 ### New Features
 
 - Add
+  [`normalize_latent_structure()`](https://caugi.org/dev/reference/normalize_latent_structure.md),
+  which normalizes the latent structure of a DAG while preserving the
+  marginal model over observed variables.
+- Add
   [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_d_separator.md),
   which computes a minimal d-separator between sets of nodes in a DAG,
   with support for mandatory inclusions and restrictions.
@@ -30,6 +34,9 @@
 
 ### Improvements
 
+- [`caugi_options()`](https://caugi.org/dev/reference/caugi_options.md)
+  now supports nested key drilling: multiple unnamed arguments traverse
+  nested options (e.g., `caugi_options("plot", "tier_style", "fill")`).
 - Rust remains the single source of truth for graph state. Graph
   properties (`simple`, `graph_class`, `nodes`, `edges`) are sourced
   from the `session`.
@@ -58,6 +65,8 @@
   [`plot()`](https://caugi.org/dev/reference/plot.md) to use incorrect
   layout if node names were not in the same order as in the graph object
   ([\#198](https://github.com/frederikfabriciusbjerre/caugi/issues/198)).
+- Fixed [`set_edges()`](https://caugi.org/dev/reference/caugi_verbs.md)
+  so that it correctly replaces symmetric edges in simple graphs.
 
 ### Deprecations
 

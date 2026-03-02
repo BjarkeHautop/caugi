@@ -51,7 +51,7 @@
 <span>  <span class="va">cg</span>,</span>
 <span>  nodes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  index <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  open <span class="op">=</span> <span class="fu"><a href="caugi_options.html">caugi_options</a></span><span class="op">(</span><span class="st">"use_open_graph_definition"</span><span class="op">)</span><span class="op">$</span><span class="va">use_open_graph_definition</span></span>
+<span>  open <span class="op">=</span> <span class="fu"><a href="caugi_options.html">caugi_options</a></span><span class="op">(</span><span class="st">"use_open_graph_definition"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,8 +64,7 @@
 
 
 <dt id="arg-nodes">nodes<a class="anchor" aria-label="anchor" href="#arg-nodes"></a></dt>
-<dd><p>A vector of node names, a vector of unquoted
-node names, or an expression combining these with <code>+</code> and <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code>.</p></dd>
+<dd><p>A character vector of node names.</p></dd>
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
@@ -74,7 +73,7 @@ node names, or an expression combining these with <code>+</code> and <code><a hr
 
 <dt id="arg-open">open<a class="anchor" aria-label="anchor" href="#arg-open"></a></dt>
 <dd><p>Boolean. Determines how the graph is interpreted when retrieving descendants.
-Default is taken from <code>caugi_options("use_open_graph_definition")$use_open_graph_definition</code>,
+Default is taken from <code>caugi_options("use_open_graph_definition")</code>,
 which by default is TRUE.</p></dd>
 
 </dl></div>

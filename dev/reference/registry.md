@@ -14,6 +14,8 @@ session.
 ``` r
 caugi_registry()
 
+list_caugi_edges()
+
 reset_caugi_registry()
 
 seal_caugi_registry()
@@ -22,6 +24,9 @@ seal_caugi_registry()
 ## Value
 
 An `edge_registry` external pointer.
+
+A data frame with columns `glyph`, `tail`, `head`, `class`, and
+`symmetric`, where each row corresponds to a registered edge type.
 
 ## Details
 
@@ -36,6 +41,9 @@ edges.
 
 - `caugi_registry()`: Access the global edge registry, creating it if
   needed.
+
+- `list_caugi_edges()`: List all registered edge types in the global
+  registry.
 
 - `reset_caugi_registry()`: Reset the global edge registry to its
   default state.

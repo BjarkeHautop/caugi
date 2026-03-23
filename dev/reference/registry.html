@@ -19,7 +19,7 @@ global instance of the registry throughout the R session.'><meta property="og:im
 
     <a class="navbar-brand me-2" href="../index.html">caugi</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,8 @@ global instance of the registry throughout the R session.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">caugi_registry</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">list_caugi_edges</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">reset_caugi_registry</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">seal_caugi_registry</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -75,6 +77,8 @@ global instance of the registry throughout the R session.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An <code>edge_registry</code> external pointer.</p>
+<p>A data frame with columns <code>glyph</code>, <code>tail</code>, <code>head</code>, <code>class</code>, and
+<code>symmetric</code>, where each row corresponds to a registered edge type.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -88,6 +92,7 @@ reverse edges, this preserves correctness of reason over these edges.</p>
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
 
 <ul><li><p><code>caugi_registry()</code>: Access the global edge registry, creating it if needed.</p></li>
+<li><p><code>list_caugi_edges()</code>: List all registered edge types in the global registry.</p></li>
 <li><p><code>reset_caugi_registry()</code>: Reset the global edge registry to its default state.</p></li>
 <li><p><code>seal_caugi_registry()</code>: Seal the global edge registry to prevent further
 modifications.</p></li>

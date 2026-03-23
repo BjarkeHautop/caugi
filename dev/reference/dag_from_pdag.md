@@ -28,8 +28,7 @@ input PDAG.
 ## References
 
 Dor, D., & Tarsi, M. (1992). "A simple algorithm to construct a
-consistent extension of a partially directed acyclic graph",
-<https://www.semanticscholar.org/paper/3cee18b1965fd94bd98a1e7f2155250276424925>.
+consistent extension of a partially directed acyclic graph".
 
 ## See also
 
@@ -37,6 +36,7 @@ Other operations:
 [`condition_marginalize()`](https://caugi.org/dev/reference/condition_marginalize.md),
 [`exogenize()`](https://caugi.org/dev/reference/exogenize.md),
 [`latent_project()`](https://caugi.org/dev/reference/latent_project.md),
+[`meek_closure()`](https://caugi.org/dev/reference/meek_closure.md),
 [`moralize()`](https://caugi.org/dev/reference/moralize.md),
 [`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
 [`normalize_latent_structure()`](https://caugi.org/dev/reference/normalize_latent_structure.md),

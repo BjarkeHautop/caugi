@@ -89,7 +89,7 @@ test_that("glyph arbitary length works", {
 test_that("View edges work with caugi_registry", {
   reset_caugi_registry()
   before_edges <- list_caugi_edges()
-  register_caugi_edge("<--", "tail", "arrow", "directed", FALSE)
+  register_caugi_edge("<--", "arrow", "tail", "directed", FALSE)
   after_edges <- list_caugi_edges()
 
   expect_equal(nrow(after_edges), nrow(before_edges) + 1)

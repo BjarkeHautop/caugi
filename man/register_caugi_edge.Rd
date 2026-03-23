@@ -30,6 +30,9 @@ reset_caugi_registry()
 # create a new registry
 reg <- caugi_registry()
 
+# list registered edges
+list_caugi_edges()
+
 # register an edge
 register_caugi_edge(
   glyph = "<--",
@@ -40,6 +43,7 @@ register_caugi_edge(
 )
 
 # now, this edge is available for caugi graphs:
+list_caugi_edges()
 cg <- caugi(A \%-->\% B, B \%<--\% C, class = "DAG")
 
 # reset the registry to default

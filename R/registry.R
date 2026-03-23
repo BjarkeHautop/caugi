@@ -65,6 +65,38 @@ caugi_registry <- function() {
   .caugi_env$reg
 }
 
+#' @describeIn registry List all registered edge types in the global registry.
+#'
+#' @returns A data frame with columns `glyph`, `tail`, `head`, `class`, and
+#' `symmetric`, where each row corresponds to a registered edge type.
+#'
+#' @export
+list_caugi_edges <- function() {
+  reg <- caugi_registry()
+  n <- edge_registry_len(reg)
+  if (n == 0) {
+    return(data.frame())
+  }
+
+  df <- do.call(
+    rbind,
+    lapply(seq_len(n) - 1L, function(code) {
+      spec <- edge_registry_spec_of_code(reg, code)
+      data.frame(
+        glyph = spec$glyph,
+        tail = spec$tail,
+        head = spec$head,
+        class = spec$class,
+        symmetric = spec$symmetric,
+        stringsAsFactors = FALSE
+      )
+    })
+  )
+
+  df
+}
+
+
 #' @describeIn registry Reset the global edge registry to its default state.
 #'
 #' @export
@@ -101,6 +133,9 @@ seal_caugi_registry <- function() {
 #' # create a new registry
 #' reg <- caugi_registry()
 #'
+#' # list registered edges
+#' list_caugi_edges()
+#'
 #' # register an edge
 #' register_caugi_edge(
 #'   glyph = "<--",
@@ -111,6 +146,7 @@ seal_caugi_registry <- function() {
 #' )
 #'
 #' # now, this edge is available for caugi graphs:
+#' list_caugi_edges()
 #' cg <- caugi(A %-->% B, B %<--% C, class = "DAG")
 #'
 #' # reset the registry to default

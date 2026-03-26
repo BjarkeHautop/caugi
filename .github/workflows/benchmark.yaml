@@ -17,11 +17,9 @@ jobs:
           r-version: release
           use-public-rspm: true
 
-      - name: Install dependencies
-        run: Rscript -e 'install.packages(c("remotes", "bench", "caugi", "optparse", "tibble"))'
-
-      - name: Install PR branch package
-        run: Rscript -e 'remotes::install_local(".", upgrade="never")'
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: remotes,bench,caugi,optparse,tibble
 
       - name: Run benchmark on PR branch
         run: |
@@ -32,6 +30,8 @@ jobs:
           ref: main
           path: main_branch
 
+      - uses: r-lib/actions/setup-r-dependencies@v2
+
       - name: Run benchmark on main branch
         run: |
           Rscript .github/workflows/benchmark.R --output main_time.rds
@@ -41,10 +41,9 @@ jobs:
           Rscript -e '
           pr <- readRDS("pr_time.rds")
           main <- readRDS("main_time.rds")
-          
+
           slowdown_median <- (pr$median - main$median) / main$median * 100
-          
-          # Make a table
+
           result_table <- tibble::tibble(
             Benchmark = names(pr$expression),
             PR_median = pr$median,
@@ -53,10 +52,10 @@ jobs:
             Main_total_time = main$total_time,
             Slowdown_percent_median = as.numeric(slowdown_median)
           )
-          
+
           cat("\n=== Benchmark Comparison ===\n")
           print(result_table, row.names = FALSE, width = Inf)
-          
+
           if (any(slowdown_median >= 20)) {
             cat("\nERROR: PR branch is >=20% (median time) slower than main for at least one benchmark entry\n")
             stop("Benchmark check failed")

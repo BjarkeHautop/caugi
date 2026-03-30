@@ -2,6 +2,18 @@
 
 ## caugi (development version)
 
+### New Features
+
+- Add
+  [`list_caugi_edges()`](https://caugi.org/dev/reference/registry.md)
+  function to list all available edge types.
+
+### Improvements
+
+- Improved performance of all queries. Speedups are more significant on
+  larger graphs, but even on small graphs, queries are roughly 5x
+  faster.
+
 ## caugi 1.1.0
 
 CRAN release: 2026-03-20

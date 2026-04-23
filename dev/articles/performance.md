@@ -85,6 +85,9 @@ ggmg <- graphs$ggmg
 bng <- graphs$bng
 dg <- graphs$dg
 
+# build the caugi to reflect correct runtime
+cg <- caugi::build(cg)
+
 test_node_index <- sample(1000, 1)
 test_node_name <- paste0("V", test_node_index)
 
@@ -262,11 +265,12 @@ margin.
 
 #### Subgraph (building)
 
-Here we see an example of where the frontloading hurts performance. When
-we build a subgraph, we have to rebuild the entire `caugi` graph object.
-Here, we see that while `caugi` outperforms other packages for queries,
-it is slower for building the graph object itself compared to `igraph`,
-as seen below:
+Subgraph extraction is where we explicitly test graph *building*
+performance. When extracting a subgraph, `caugi` must construct a new
+graph object with its CSR indexes, so this benchmark captures the cost
+of that frontloaded work. Note that
+[`caugi::subgraph()`](https://caugi.org/dev/reference/subgraph.md) is
+called on a graph that has already been built.
 
 ``` r
 subgraph_nodes_index <- sample.int(1000, 500)
@@ -274,7 +278,8 @@ subgraph_nodes <- paste0("V", subgraph_nodes_index)
 
 bm_subgraph <- bench::mark(
   caugi = {
-    caugi::subgraph(cg, subgraph_nodes)
+    sg <- caugi::subgraph(cg, subgraph_nodes)
+    caugi::build(sg)
   },
   igraph = {
     igraph::subgraph(ig, subgraph_nodes)
@@ -293,7 +298,73 @@ packages.](performance_files/figure-html/benchmark-subgraph-1.png)
 
 Benchmarking subgraph extraction for different packages.
 
-### Session info
+To make the comparison more demanding, we also benchmark two larger
+settings where we only compare `caugi` and `igraph` directly. This
+isolates subgraph building performance at scale without the conversion
+overhead of other packages.
+
+``` r
+n_large <- 10000
+sub_frac <- 0.10
+sub_k <- as.integer(n_large * sub_frac)
+
+cg_large_sparse <- caugi::generate_graph(n = n_large, p = 0.05, class = "DAG")
+caugi::build(cg_large_sparse)
+ig_large_sparse <- caugi::as_igraph(cg_large_sparse)
+sub_idx_sparse <- sample.int(n_large, sub_k)
+sub_nodes_sparse <- paste0("V", sub_idx_sparse)
+
+bm_subgraph_large_sparse <- bench::mark(
+  caugi = {
+    sg <- caugi::subgraph(cg_large_sparse, sub_nodes_sparse)
+    caugi::build(sg)
+  },
+  igraph = {
+    igraph::subgraph(ig_large_sparse, sub_nodes_sparse)
+  },
+  check = FALSE,
+  iterations = 30
+)
+
+plot(bm_subgraph_large_sparse)
+```
+
+![Subgraph extraction on a large sparse graph (n = 10000, p =
+0.05).](performance_files/figure-html/benchmark-subgraph-large-sparse-1.png)
+
+Subgraph extraction on a large sparse graph (n = 10000, p = 0.05).
+
+``` r
+cg_large_dense <- caugi::generate_graph(n = n_large, p = 0.25, class = "DAG")
+caugi::build(cg_large_dense)
+ig_large_dense <- caugi::as_igraph(cg_large_dense)
+sub_idx_dense <- sample.int(n_large, sub_k)
+sub_nodes_dense <- paste0("V", sub_idx_dense)
+
+bm_subgraph_large_dense <- bench::mark(
+  caugi = {
+    sg <- caugi::subgraph(cg_large_dense, sub_nodes_dense)
+    caugi::build(sg)
+  },
+  igraph = {
+    igraph::subgraph(ig_large_dense, sub_nodes_dense)
+  },
+  check = FALSE,
+  iterations = 20
+)
+
+plot(bm_subgraph_large_dense)
+```
+
+![Subgraph extraction on a large dense graph (\`n = 10000\`, \`p =
+0.25\`).](performance_files/figure-html/benchmark-subgraph-large-dense-1.png)
+
+Subgraph extraction on a large dense graph (`n = 10000`, `p = 0.25`).
+
+We see that `caugi` is competitive with `igraph` for subgraph
+extraction, even though `caugi` must rebuild its full CSR representation
+for the result. `igraph` does still have a slight edge. \### Session
+info
 
 ``` r
 sessionInfo()
@@ -322,26 +393,26 @@ sessionInfo()
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] tidyr_1.3.2         sass_0.4.10         generics_0.1.4     
-#>  [4] digest_0.6.39       magrittr_2.0.4      evaluate_1.0.5     
+#>  [4] digest_0.6.39       magrittr_2.0.5      evaluate_1.0.5     
 #>  [7] grid_4.5.3          RColorBrewer_1.1-3  fastmap_1.2.0      
 #> [10] jsonlite_2.0.0      graph_1.88.1        bench_1.1.4        
-#> [13] BiocManager_1.30.27 purrr_1.2.1         dagitty_0.3-4      
+#> [13] BiocManager_1.30.27 purrr_1.2.2         dagitty_0.3-4      
 #> [16] scales_1.4.0        textshaping_1.0.5   jquerylib_0.1.4    
-#> [19] cli_3.6.5           rlang_1.1.7         ggm_2.5.2          
+#> [19] cli_3.6.6           rlang_1.2.0         ggm_2.5.2          
 #> [22] bnlearn_5.1         withr_3.0.2         cachem_1.1.0       
 #> [25] yaml_2.3.12         otel_0.2.0          ggbeeswarm_0.7.3   
-#> [28] tools_4.5.3         parallel_4.5.3      dplyr_1.2.0        
+#> [28] tools_4.5.3         parallel_4.5.3      dplyr_1.2.1        
 #> [31] profmem_0.7.0       boot_1.3-32         BiocGenerics_0.56.0
-#> [34] curl_7.0.0          vctrs_0.7.2         R6_2.6.1           
-#> [37] stats4_4.5.3        lifecycle_1.0.5     fs_2.0.1           
-#> [40] V8_8.0.1            htmlwidgets_1.6.4   vipor_0.4.7        
+#> [34] curl_7.0.0          vctrs_0.7.3         R6_2.6.1           
+#> [37] stats4_4.5.3        lifecycle_1.0.5     fs_2.1.0           
+#> [40] V8_8.2.0            htmlwidgets_1.6.4   vipor_0.4.7        
 #> [43] MASS_7.3-65         ragg_1.5.2          beeswarm_0.4.0     
 #> [46] pkgconfig_2.0.3     desc_1.4.3          pkgdown_2.2.0      
 #> [49] pillar_1.11.1       bslib_0.10.0        gtable_0.3.6       
-#> [52] data.table_1.18.2.1 glue_1.8.0          Rcpp_1.1.1         
+#> [52] data.table_1.18.2.1 glue_1.8.1          Rcpp_1.1.1-1       
 #> [55] systemfonts_1.3.2   tidyselect_1.2.1    xfun_0.57          
 #> [58] tibble_3.3.1        knitr_1.51          farver_2.1.2       
-#> [61] htmltools_0.5.9     igraph_2.2.2        labeling_0.4.3     
+#> [61] htmltools_0.5.9     igraph_2.3.0        labeling_0.4.3     
 #> [64] rmarkdown_2.31      caugi_1.1.0.9000    compiler_4.5.3     
-#> [67] S7_0.2.1
+#> [67] S7_0.2.1-1
 ```

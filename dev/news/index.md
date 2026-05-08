@@ -2,8 +2,18 @@
 
 ## caugi (development version)
 
+## caugi 1.2.0
+
+CRAN release: 2026-05-05
+
 ### New Features
 
+- Add
+  [`caugi_layout_circle()`](https://caugi.org/dev/reference/caugi_layout_circle.md)
+  and a `"circle"` method for
+  [`caugi_layout()`](https://caugi.org/dev/reference/caugi_layout.md)
+  that places nodes evenly along the perimeter of a circle
+  ([\#108](https://github.com/frederikfabriciusbjerre/caugi/issues/108)).
 - Add
   [`list_caugi_edges()`](https://caugi.org/dev/reference/registry.md)
   function to list all available edge types.
@@ -18,6 +28,35 @@
   faster.
 - [`exogenize()`](https://caugi.org/dev/reference/exogenize.md) is now
   implemented in Rust for DAGs, which reduces overhead on larger graphs.
+- [`normalize_latent_structure()`](https://caugi.org/dev/reference/normalize_latent_structure.md)
+  is now implemented in Rust for DAGs for faster latent normalization
+  workflows.
+- [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_separator.md)
+  is renamed to
+  [`minimal_separator()`](https://caugi.org/dev/reference/minimal_separator.md)
+  and now supports ADMG and AG inputs (previously DAG-only), returning a
+  minimal m-separator. Implemented via the unified linear-time algorithm
+  of van der Zander & Liśkiewicz (UAI 2020). The old name
+  [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_separator.md)
+  remains as a deprecated alias.
+
+### Bug Fixes
+
+- Fix [`m_separated()`](https://caugi.org/dev/reference/m_separated.md)
+  on ADMGs: moralization now marries every pair in `pa(v) ∪ sp(v)`, not
+  just `pa(v)`. The old code missed moral edges from bidirected
+  co-parents and gave false positives (e.g. claimed `Z ⊥ Y | X` for
+  `Z -> X -> Y`, `X <-> Y`).
+- Fix
+  [`is_valid_adjustment_admg()`](https://caugi.org/dev/reference/is_valid_adjustment_admg.md)
+  and
+  [`all_adjustment_sets_admg()`](https://caugi.org/dev/reference/all_adjustment_sets_admg.md)
+  to verify the GAC’s m-separation condition in the proper backdoor
+  graph rather than via a per-neighbour decomposition. The old check
+  trivially accepted neighbours of `X` that were themselves in `Z`, so
+  it falsely classified `{C}` as a valid adjustment set in the M-bias
+  ADMG `C -> X, C <-> X, C -> Y, C <-> Y, X -> Y`
+  ([\#277](https://github.com/frederikfabriciusbjerre/caugi/issues/277)).
 
 ## caugi 1.1.0
 
@@ -30,7 +69,7 @@ CRAN release: 2026-03-20
   which normalizes the latent structure of a DAG while preserving the
   marginal model over observed variables.
 - Add
-  [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_d_separator.md),
+  [`minimal_d_separator()`](https://caugi.org/dev/reference/minimal_separator.md),
   which computes a minimal d-separator between sets of nodes in a DAG,
   with support for mandatory inclusions and restrictions.
 - Add [`posteriors()`](https://caugi.org/dev/reference/posteriors.md)

@@ -324,10 +324,16 @@ caugi_layout_bipartite <- function(
 #'     subsequent tiers to the right, last tier at right (x=1).
 #'   * `"rows"`: Horizontal tiers. First tier at top (y=1),
 #'     subsequent tiers below, last tier at bottom (y=0).
-#' @param jitter Non-negative numeric. When greater than zero, nodes within
-#'   the same tier are offset in the perpendicular direction (y for `"rows"`,
-#'   x for `"columns"`) using an alternating +jitter / -jitter pattern.
-#'   Default is  `0` (no jitter).
+#' @param jitter Non-negative numeric. When greater than zero, nodes within the
+#'   same tier are offset in the **perpendicular** direction (y for `"rows"`, x
+#'   for `"columns"`) using an alternating +`jitter` / −`jitter` pattern.
+#'   Useful for making within-tier edges visible. Default is `0` (no jitter).
+#' @param jitter_along Non-negative numeric. When greater than zero, nodes
+#'   within the same tier are offset **along** the tier axis (x for `"rows"`, y
+#'   for `"columns"`) using an alternating +`jitter_along` / −`jitter_along`
+#'   pattern. Useful for preventing skip-tier edges from visually passing
+#'   through intermediate-tier nodes that share the same position along the tier
+#'   axis. Default is `0` (no jitter).
 #'
 #' @returns A `data.frame` with columns `name`, `x`, `y`, and `tier` containing
 #'   node names, their coordinates, and tier assignments (0-indexed). The
@@ -377,6 +383,26 @@ caugi_layout_bipartite <- function(
 #' )
 #' plot(cg_clique, layout = layout_jitter)
 #'
+#' # Use jitter_along to prevent skip-tier edges from visually passing through
+#' # intermediate-tier nodes that share the same along-tier position
+#' cg_skip <- caugi(
+#'   r1_A %-->% r2_A + r3_A,
+#'   r1_B %-->% r2_B + r3_B,
+#'   r1_C %-->% r2_C + r3_C
+#' )
+#' tiers_skip <- list(
+#'   c("r1_A", "r1_B", "r1_C"),
+#'   c("r2_A", "r2_B", "r2_C"),
+#'   c("r3_A", "r3_B", "r3_C")
+#' )
+#' layout_skip <- caugi_layout_tiered(
+#'   cg_skip,
+#'   tiers_skip,
+#'   orientation = "rows",
+#'   jitter_along = 0.05
+#' )
+#' plot(cg_skip, layout = layout_skip)
+#'
 #' @family plotting
 #' @concept plotting
 #'
@@ -385,7 +411,8 @@ caugi_layout_tiered <- function(
   x,
   tiers,
   orientation = c("columns", "rows"),
-  jitter = 0
+  jitter = 0,
+  jitter_along = 0
 ) {
   is_caugi(x, throw_error = TRUE)
 
@@ -393,6 +420,9 @@ caugi_layout_tiered <- function(
 
   if (!is.numeric(jitter) || length(jitter) != 1 || jitter < 0) {
     stop("jitter must be a single non-negative number", call. = FALSE)
+  }
+  if (!is.numeric(jitter_along) || length(jitter_along) != 1 || jitter_along < 0) {
+    stop("jitter_along must be a single non-negative number", call. = FALSE)
   }
 
   node_names <- nodes(x)[["name"]]
@@ -539,21 +569,35 @@ caugi_layout_tiered <- function(
     stringsAsFactors = FALSE
   )
 
-  if (jitter > 0) {
+  if (jitter > 0 || jitter_along > 0) {
     for (t in unique_tiers) {
       tier_idx <- which(tier_assignments == t)
       n_in_tier <- length(tier_idx)
-      if (n_in_tier < 2) {
-        next
+
+      if (jitter > 0 && n_in_tier >= 2) {
+        # Perpendicular to tier axis: y for "rows", x for "columns"
+        if (orientation == "rows") {
+          ordered_idx <- tier_idx[order(result$x[tier_idx])]
+          offsets <- jitter * ifelse(seq_len(n_in_tier) %% 2 == 1, 1, -1)
+          result$y[ordered_idx] <- result$y[ordered_idx] + offsets
+        } else {
+          ordered_idx <- tier_idx[order(result$y[tier_idx])]
+          offsets <- jitter * ifelse(seq_len(n_in_tier) %% 2 == 1, 1, -1)
+          result$x[ordered_idx] <- result$x[ordered_idx] + offsets
+        }
       }
-      if (orientation == "rows") {
-        ordered_idx <- tier_idx[order(result$x[tier_idx])]
-        offsets <- jitter * ifelse(seq_len(n_in_tier) %% 2 == 1, 1, -1)
-        result$y[ordered_idx] <- result$y[ordered_idx] + offsets
-      } else {
-        ordered_idx <- tier_idx[order(result$y[tier_idx])]
-        offsets <- jitter * ifelse(seq_len(n_in_tier) %% 2 == 1, 1, -1)
-        result$x[ordered_idx] <- result$x[ordered_idx] + offsets
+
+      if (jitter_along > 0) {
+        # Shift the entire tier uniformly along the tier axis (x for "rows",
+        # y for "columns"), alternating sign per tier so adjacent tiers always
+        # move in opposite directions.  This displaces intermediate-tier nodes
+        # away from skip-tier edges without scrambling within-tier spacing.
+        tier_offset <- jitter_along * ifelse(t %% 2 == 0, 1, -1)
+        if (orientation == "rows") {
+          result$x[tier_idx] <- result$x[tier_idx] + tier_offset
+        } else {
+          result$y[tier_idx] <- result$y[tier_idx] + tier_offset
+        }
       }
     }
   }

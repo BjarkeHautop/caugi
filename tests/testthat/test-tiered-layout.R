@@ -690,7 +690,7 @@ test_that("tiered layout validation branches are covered", {
   )
 })
 
-test_that("jitter offsets nodes in perpendicular direction for rows", {
+test_that("jitter offsets nodes perpendicularly for rows", {
   cg <- caugi(A %---% B + C, B %---% C)
   tiers <- list(c("A", "B", "C"))
 
@@ -703,7 +703,6 @@ test_that("jitter offsets nodes in perpendicular direction for rows", {
   )
 
   expect_equal(length(unique(layout_no_jitter$y)), 1)
-
   expect_gt(length(unique(layout_jitter$y)), 1)
 
   base_y <- unique(layout_no_jitter$y)
@@ -713,7 +712,7 @@ test_that("jitter offsets nodes in perpendicular direction for rows", {
   expect_equal(layout_jitter$x, layout_no_jitter$x)
 })
 
-test_that("jitter offsets nodes in perpendicular direction for columns", {
+test_that("jitter offsets nodes perpendicularly for columns", {
   cg <- caugi(A %---% B + C, B %---% C)
   tiers <- list(c("A", "B", "C"))
 
@@ -726,7 +725,6 @@ test_that("jitter offsets nodes in perpendicular direction for columns", {
   )
 
   expect_equal(length(unique(layout_no_jitter$x)), 1)
-
   expect_gt(length(unique(layout_jitter$x)), 1)
 
   base_x <- unique(layout_no_jitter$x)
@@ -734,6 +732,96 @@ test_that("jitter offsets nodes in perpendicular direction for columns", {
   expect_equal(max(layout_jitter$x), base_x + 0.1)
 
   expect_equal(layout_jitter$y, layout_no_jitter$y)
+})
+
+test_that("jitter_along shifts entire tier uniformly along tier axis for rows", {
+  cg <- caugi(
+    r1_A %-->% r2_A + r3_A,
+    r1_B %-->% r2_B + r3_B
+  )
+  tiers <- list(c("r1_A", "r1_B"), c("r2_A", "r2_B"), c("r3_A", "r3_B"))
+
+  layout_base <- caugi_layout_tiered(cg, tiers, orientation = "rows")
+  layout_jitter <- caugi_layout_tiered(
+    cg,
+    tiers,
+    orientation = "rows",
+    jitter_along = 0.1
+  )
+
+  # Tier 0 (even): +0.1; Tier 1 (odd): -0.1; Tier 2 (even): +0.1
+  expect_equal(
+    layout_jitter$x[layout_jitter$name == "r1_A"],
+    layout_base$x[layout_base$name == "r1_A"] + 0.1
+  )
+  expect_equal(
+    layout_jitter$x[layout_jitter$name == "r2_A"],
+    layout_base$x[layout_base$name == "r2_A"] - 0.1
+  )
+  expect_equal(
+    layout_jitter$x[layout_jitter$name == "r3_A"],
+    layout_base$x[layout_base$name == "r3_A"] + 0.1
+  )
+
+  # y unchanged
+  expect_equal(layout_jitter$y, layout_base$y)
+
+  # Within-tier spacing is preserved (uniform shift per tier)
+  delta_r1 <- diff(sort(layout_jitter$x[layout_jitter$name %in% c("r1_A", "r1_B")]))
+  delta_base <- diff(sort(layout_base$x[layout_base$name %in% c("r1_A", "r1_B")]))
+  expect_equal(delta_r1, delta_base)
+})
+
+test_that("jitter_along shifts entire tier uniformly along tier axis for columns", {
+  cg <- caugi(
+    r1_A %-->% r2_A + r3_A,
+    r1_B %-->% r2_B + r3_B
+  )
+  tiers <- list(c("r1_A", "r1_B"), c("r2_A", "r2_B"), c("r3_A", "r3_B"))
+
+  layout_base <- caugi_layout_tiered(cg, tiers, orientation = "columns")
+  layout_jitter <- caugi_layout_tiered(
+    cg,
+    tiers,
+    orientation = "columns",
+    jitter_along = 0.1
+  )
+
+  # Tier 0 (even): +0.1; Tier 1 (odd): -0.1; Tier 2 (even): +0.1
+  expect_equal(
+    layout_jitter$y[layout_jitter$name == "r1_A"],
+    layout_base$y[layout_base$name == "r1_A"] + 0.1
+  )
+  expect_equal(
+    layout_jitter$y[layout_jitter$name == "r2_A"],
+    layout_base$y[layout_base$name == "r2_A"] - 0.1
+  )
+  expect_equal(
+    layout_jitter$y[layout_jitter$name == "r3_A"],
+    layout_base$y[layout_base$name == "r3_A"] + 0.1
+  )
+
+  # x unchanged
+  expect_equal(layout_jitter$x, layout_base$x)
+})
+
+test_that("jitter and jitter_along can be combined", {
+  cg <- caugi(A %---% B + C, B %---% C)
+  tiers <- list(c("A", "B", "C"))
+
+  layout_no_jitter <- caugi_layout_tiered(cg, tiers, orientation = "rows")
+  layout_jitter <- caugi_layout_tiered(
+    cg,
+    tiers,
+    orientation = "rows",
+    jitter = 0.07,
+    jitter_along = 0.05
+  )
+
+  # jitter creates diverse y values within tier
+  expect_gt(length(unique(layout_jitter$y)), 1)
+  # jitter_along shifts all x by +0.05 (single tier, tier 0 = even)
+  expect_equal(layout_jitter$x, layout_no_jitter$x + 0.05)
 })
 
 test_that("jitter skips single-node tiers", {
@@ -760,6 +848,16 @@ test_that("jitter validates input", {
   expect_error(
     caugi_layout_tiered(cg, tiers, jitter = "big"),
     "jitter must be a single non-negative number"
+  )
+
+  expect_error(
+    caugi_layout_tiered(cg, tiers, jitter_along = -0.1),
+    "jitter_along must be a single non-negative number"
+  )
+
+  expect_error(
+    caugi_layout_tiered(cg, tiers, jitter_along = "big"),
+    "jitter_along must be a single non-negative number"
   )
 })
 

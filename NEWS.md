@@ -16,9 +16,12 @@
 
 ## Improvements
 
-* `caugi_layout_tiered()` gains a `jitter` argument (default `0`). When set to
-  a positive value, nodes within the same tier are offset by alternating
-  +`jitter` / −`jitter` in the perpendicular direction.
+- `caugi_layout_tiered()` gains `jitter` and `jitter_along` arguments (both
+  default `0`). `jitter` offsets nodes perpendicular to the tier axis (y for
+  `"rows"`, x for `"columns"`), making within-tier edges visible. `jitter_along`
+  offsets nodes along the tier axis (x for `"rows"`, y for `"columns"`),
+  preventing skip-tier edges from visually passing through intermediate-tier
+  nodes that share the same position along the tier axis.
 - Meek-closed PDAGs are now reported with `@graph_class = "MPDAG"` instead of
   `"PDAG"`. This affects the result of `meek_closure()` and
   `generate_graph(class = "CPDAG")`. Predicates and verbs defined on PDAGs

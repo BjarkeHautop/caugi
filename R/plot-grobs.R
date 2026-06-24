@@ -114,6 +114,13 @@ make_tiers <- function(
   # Create grobs for each tier
   tier_grobs <- grid::gList()
 
+  # Pre-compute global extents across all nodes so that the shared axis
+  # (x for "rows", y for "columns") is identical for every tier box.
+  global_x_min <- min(grid::grobX(circle_grobs, "west")) - padding
+  global_x_max <- max(grid::grobX(circle_grobs, 0)) + padding
+  global_y_min <- min(grid::grobY(circle_grobs, "south")) - padding
+  global_y_max <- max(grid::grobY(circle_grobs, "north")) + padding
+
   for (i in seq_len(n_tiers)) {
     ind <- which((assignments + 1L) %in% i)
 
@@ -123,11 +130,20 @@ make_tiers <- function(
 
     circle_grobs_i <- circle_grobs[ind]
 
-    x_min <- min(grid::grobX(circle_grobs_i, "west")) - padding
-    x_max <- max(grid::grobX(circle_grobs_i, 0)) + padding
+    if (orientation == "rows") {
+      # Horizontal tiers: all boxes span the same x range; y is tier-specific
+      x_min <- global_x_min
+      x_max <- global_x_max
+      y_min <- min(grid::grobY(circle_grobs_i, "south")) - padding
+      y_max <- max(grid::grobY(circle_grobs_i, "north")) + padding
+    } else {
+      # Vertical tiers: all boxes span the same y range; x is tier-specific
+      x_min <- min(grid::grobX(circle_grobs_i, "west")) - padding
+      x_max <- max(grid::grobX(circle_grobs_i, 0)) + padding
+      y_min <- global_y_min
+      y_max <- global_y_max
+    }
 
-    y_min <- min(grid::grobY(circle_grobs_i, "south")) - padding
-    y_max <- max(grid::grobY(circle_grobs_i, "north")) + padding
     y_mid <- (y_min + y_max) / 2
 
     h <- y_max - y_min

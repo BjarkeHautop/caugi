@@ -53,7 +53,7 @@ graphNEL, matrix, tidygraph, daggity, bn, or igraph."><meta property="og:image" 
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_caugi</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DAG"</span>, <span class="st">"UG"</span>, <span class="st">"PDAG"</span>, <span class="st">"MPDAG"</span>, <span class="st">"ADMG"</span>, <span class="st">"AG"</span>, <span class="st">"PAG"</span>, <span class="st">"UNKNOWN"</span><span class="op">)</span>,</span>
+<span>  class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DAG"</span>, <span class="st">"UG"</span>, <span class="st">"PDAG"</span>, <span class="st">"MPDAG"</span>, <span class="st">"CPDAG"</span>, <span class="st">"ADMG"</span>, <span class="st">"AG"</span>, <span class="st">"PAG"</span>, <span class="st">"UNKNOWN"</span><span class="op">)</span>,</span>
 <span>  simple <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  collapse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  collapse_to <span class="op">=</span> <span class="st">"---"</span>,</span>
@@ -71,8 +71,8 @@ graphNEL, matrix, tidygraph, daggity, bn, or igraph."><meta property="og:image" 
 
 <dt id="arg-class">class<a class="anchor" aria-label="anchor" href="#arg-class"></a></dt>
 <dd><p>Character; one of <code>"DAG"</code>, <code>"UG"</code>, <code>"PDAG"</code>, <code>"MPDAG"</code>,
-<code>"ADMG"</code>, <code>"AG"</code>, or <code>"UNKNOWN"</code>. <code>"PAG"</code> is only supported for integer
-coded matrices.</p></dd>
+<code>"CPDAG"</code>, <code>"ADMG"</code>, <code>"AG"</code>, or <code>"UNKNOWN"</code>. <code>"PAG"</code> is only supported for
+integer coded matrices.</p></dd>
 
 
 <dt id="arg-simple">simple<a class="anchor" aria-label="anchor" href="#arg-simple"></a></dt>
@@ -104,9 +104,9 @@ Should be a registered symmetrical edge glyph. Default is <code>"---"</code>.</p
 and the columns are the <code>to</code> nodes. Thus, for a graph, G: A –&gt; B, we would
 have that <code>G["A", "B"] == 1</code> and <code>G["B", "A"] == 0</code>.
 For PAGs, the integer codes are as follows (as used in <code>pcalg</code>):</p><ul><li><p>0: no edge</p></li>
-<li><p>1: circle (e.g., <code>A o-o B</code> or <code>A o-- B</code>)</p></li>
+<li><p>1: circle (e.g., <code>A o-o B</code> or <code>A --o B</code>)</p></li>
 <li><p>2: arrowhead (e.g., <code>A --&gt; B</code> or <code>A o-&gt; B</code>)</p></li>
-<li><p>3: tail (e.g., <code>A o-- B</code> or <code>A --- B</code>)</p></li>
+<li><p>3: tail (e.g., <code>A --o B</code> or <code>A --- B</code>)</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

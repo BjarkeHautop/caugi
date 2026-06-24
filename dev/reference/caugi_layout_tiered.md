@@ -8,7 +8,7 @@ computing the layout.
 ## Usage
 
 ``` r
-caugi_layout_tiered(x, tiers, orientation = c("columns", "rows"))
+caugi_layout_tiered(x, tiers, orientation = c("columns", "rows"), jitter = 0)
 ```
 
 ## Arguments
@@ -44,6 +44,13 @@ caugi_layout_tiered(x, tiers, orientation = c("columns", "rows"))
 
   - `"rows"`: Horizontal tiers. First tier at top (y=1), subsequent
     tiers below, last tier at bottom (y=0).
+
+- jitter:
+
+  Non-negative numeric. When greater than zero, nodes within the same
+  tier are offset in the perpendicular direction (y for `"rows"`, x for
+  `"columns"`) using an alternating +jitter / -jitter pattern. Default
+  is `0` (no jitter).
 
 ## Value
 
@@ -100,5 +107,17 @@ layout <- caugi_layout_tiered(cg, tiers, orientation = "rows")
 
 # The layout includes tier information, so plot() works without passing tiers
 plot(cg, layout = layout)
+
+
+# Jitter nodes within tiers to make within-tier edges visible
+cg_clique <- caugi(A %---% B + C, B %---% C)
+tiers_clique <- list(c("A", "B", "C"))
+layout_jitter <- caugi_layout_tiered(
+  cg_clique,
+  tiers_clique,
+  orientation = "rows",
+  jitter = 0.07
+)
+plot(cg_clique, layout = layout_jitter)
 
 ```

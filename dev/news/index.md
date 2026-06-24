@@ -7,9 +7,27 @@
 - Add `==` and `!=` methods for `caugi` objects so `cg1 == cg2` returns
   a single logical comparing graph content (class, nodes, edges,
   `simple`) rather than session identity.
+- Add first-class `"CPDAG"` graph class support across the constructor
+  ([`caugi()`](https://caugi.org/dev/reference/caugi.md)), coercion
+  ([`as_caugi()`](https://caugi.org/dev/reference/as_caugi.md)), and
+  class mutation
+  ([`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md)).
+  Construction validates the full CPDAG invariant (chordal chain
+  components, an acyclic component DAG, Meek closure, and strong arrow
+  protection). `generate_graph(class = "CPDAG")` now returns a graph
+  with `@graph_class = "CPDAG"` instead of `"MPDAG"`, the precise label
+  for the essential graph of a Markov equivalence class. Predicates
+  defined on PDAGs and MPDAGs
+  ([`is_pdag()`](https://caugi.org/dev/reference/is_pdag.md),
+  [`is_mpdag()`](https://caugi.org/dev/reference/is_mpdag.md), etc.)
+  continue to accept CPDAGs unchanged.
 
 ### Improvements
 
+- [`caugi_layout_tiered()`](https://caugi.org/dev/reference/caugi_layout_tiered.md)
+  gains a `jitter` argument (default `0`). When set to a positive value,
+  nodes within the same tier are offset by alternating +`jitter` /
+  −`jitter` in the perpendicular direction.
 - Meek-closed PDAGs are now reported with `@graph_class = "MPDAG"`
   instead of `"PDAG"`. This affects the result of
   [`meek_closure()`](https://caugi.org/dev/reference/meek_closure.md)
@@ -17,6 +35,30 @@
   PDAGs ([`is_pdag()`](https://caugi.org/dev/reference/is_pdag.md),
   [`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
   etc.) continue to accept MPDAGs unchanged.
+- `adjustment_set(type = "backdoor")` now returns an inclusion-minimal
+  backdoor adjustment set, computed in linear time as a minimal
+  d-separator in the proper backdoor graph, rather than the full set of
+  parents of the exposure. `"PDAG"`. This affects the result of
+  [`meek_closure()`](https://caugi.org/dev/reference/meek_closure.md).
+  Predicates and verbs defined on PDAGs
+  ([`is_pdag()`](https://caugi.org/dev/reference/is_pdag.md),
+  [`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
+  etc.) continue to accept MPDAGs unchanged. `"PDAG"`. This affects the
+  result of
+  [`meek_closure()`](https://caugi.org/dev/reference/meek_closure.md)
+  and `generate_graph(class = "CPDAG")`. Predicates and verbs defined on
+  PDAGs ([`is_pdag()`](https://caugi.org/dev/reference/is_pdag.md),
+  [`mutate_caugi()`](https://caugi.org/dev/reference/mutate_caugi.md),
+  etc.) continue to accept MPDAGs unchanged.
+- The performance vignette is now a true vignette (rather than a
+  pkgdown-only article) and is rebuilt manually from a cross-language
+  harness under `tools/benchmark/`. The harness compares `caugi` to
+  `igraph`, `bnlearn`, `dagitty`, `ggm`, `pcalg`, `pgmpy`, and Tetrad on
+  a `n ∈ {100, 1000, 10000}` grid. The d-separation benchmark now uses a
+  minimal d-separator computed via
+  [`minimal_separator()`](https://caugi.org/dev/reference/minimal_separator.md)
+  (previously used a backdoor adjustment set, which is not in general a
+  d-separating set).
 
 ### Bug Fixes
 
@@ -25,6 +67,29 @@
   failing with `` `from`, `edge`, `to` must be equal length. `` when a
   sink had multiple undirected neighbors
   ([\#298](https://github.com/frederikfabriciusbjerre/caugi/issues/298)).
+
+- Fixed a bug causing a partially undirected (`--o`) edges to be plotted
+  as undirected edges.
+
+- Fix `adjustment_set(type = "backdoor")` returning an invalid (often
+  empty) set when a parent of the exposure lies on a backdoor path but
+  is not an ancestor of the outcome
+  ([\#308](https://github.com/frederikfabriciusbjerre/caugi/issues/308)).
+  The result is now always a valid backdoor adjustment set.
+
+- Fixed [`is_mag()`](https://caugi.org/dev/reference/is_mag.md)
+  returning incorrect results for some ancestral graphs. Adjacency was
+  tested by binary-searching the concatenation of separately sorted
+  neighbor buckets, which is not globally sorted, so some adjacent pairs
+  were missed
+  ([\#309](https://github.com/frederikfabriciusbjerre/caugi/issues/309)).
+
+- Fixed [`to_dot()`](https://caugi.org/dev/reference/to_dot.md) and
+  [`to_mermaid()`](https://caugi.org/dev/reference/to_mermaid.md) (and
+  [`write_dot()`](https://caugi.org/dev/reference/write_dot.md)/[`write_mermaid()`](https://caugi.org/dev/reference/write_mermaid.md))
+  silently converting partial `--o` and `o-o` edges into plain directed
+  edges, dropping the circle endpoints
+  ([\#307](https://github.com/frederikfabriciusbjerre/caugi/issues/307)).
 
 ## caugi 1.2.0
 
